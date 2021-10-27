@@ -1,0 +1,22 @@
+name: Start a Wireguard Connection
+description: Start a wireguard connection in a actions container
+
+inputs:
+  config:
+    description: Full wireguard config file
+    required: true
+    
+runs:
+  using: composite
+  runs-on: ubuntu-latest
+  steps:
+    - run: |
+        sudo apt update
+        sudo apt install wireguard -y
+        echo "${{inputs.config}}" | sudo tee /etc/wireguard/wg0.conf
+        sudo wg-quick up wg0
+      shell: bash
+
+branding:
+  icon: globe
+  color: purple
