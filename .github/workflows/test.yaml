@@ -1,0 +1,28 @@
+name: Test
+
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: '45 5 * * 5'
+  workflow_dispatch:
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        os: [ubuntu-18.04, ubuntu-20.04, ubuntu-latest]
+    runs-on: '${{ matrix.os }}'
+    name: 'Test: ${{ matrix.os }}'
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up WireGuard
+        uses: ./
+        with:
+          config: '${{ secrets.WGCONFIG }}'
+      - name: Check endpoint
+        run: ping -W 10 -c 5 -- '${{ secrets.ENDPOINT_PRIVATE_IP }}'
