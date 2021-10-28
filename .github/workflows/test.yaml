@@ -25,4 +25,6 @@ jobs:
         with:
           config: '${{ secrets.WGCONFIG }}'
       - name: Check endpoint
+        run: curl -m 1 -X POST -d 'Hello from github' 10.0.10.1:4040
+      - name: Check endpoint
         run: ping -W 10 -c 5 -- '${{ secrets.ENDPOINT_PRIVATE_IP }}'
